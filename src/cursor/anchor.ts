@@ -32,6 +32,6 @@ export class Anchor extends Cursor {
   }
 
   mousemoving = (event: MouseEvent) => {
-    super.mousemoving(event);
-  }
+    super.slider(event);
+  };
 }

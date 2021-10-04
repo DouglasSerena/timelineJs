@@ -5,8 +5,8 @@ import { MouseMoving } from "../events/mousemoving";
 
 export class Cursor {
   private mouseMoving: MouseMoving;
-
-  cursor = document.createElement("div");
+  protected cursor = document.createElement("div");
+  public time = 0;
 
   constructor(container: HTMLElement) {
     container.appendChild(this.cursor);
@@ -25,19 +25,20 @@ export class Cursor {
 
     this.mouseMoving = new MouseMoving(this.cursor);
 
-    this.cursor.addEventListener("mousemoving" as any, this.mousemoving);
+    this.cursor.addEventListener("mousemoving" as any, (event) =>
+      this.mousemoving(event)
+    );
   }
 
   init() {}
-
-  update(time: number) {
+  update() {
     let { start, end } = core.time.range;
 
-    if (time >= start && time <= end) {
+    if (this.time >= start && this.time <= end) {
       if (this.cursor.hidden) {
         this.cursor.hidden = false;
       }
-      let percentOffsetX = ((time - start) * 100) / core.time.between;
+      let percentOffsetX = ((this.time - start) * 100) / core.time.between;
       let offsetX = (percentOffsetX * core.canvas.width) / 100;
 
       if (offsetX <= 0) offsetX = 0;
@@ -51,7 +52,9 @@ export class Cursor {
     }
   }
 
-  mousemoving = (event: MouseEvent): any => {
+  mousemoving = (event: MouseEvent) => {};
+
+  slider(event: MouseEvent): any {
     let { left, width } = core.canvas.getBoundingClientRect();
     let offsetX = event.x - left;
     if (offsetX < 0) {
@@ -63,8 +66,15 @@ export class Cursor {
 
     let percentOffsetX = (offsetX * 100) / width;
     let timeRaw = (core.time.between * percentOffsetX) / 100;
-    return core.time.range.start + timeRaw;
-  };
+    this.time = core.time.range.start + timeRaw;
+
+    if (this.time >= core.time.range.end) {
+      core.time.range.start += this.time - core.time.range.end;
+    }
+    if (this.time <= core.time.range.start) {
+      core.time.range.start += this.time - core.time.range.start;
+    }
+  }
 
   destroy() {
     this.mouseMoving.destroy();
