@@ -1,0 +1,1 @@
+import "./indexedDB.polyfill.js";
