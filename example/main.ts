@@ -1,6 +1,10 @@
+import Hls from "hls.js";
 import Timeline from "../src/timeline";
 
-new Timeline(
-  document.querySelector("video"),
-  document.querySelector("#timelinejs")!
-).init();
+const video = document.querySelector("video");
+
+const hls = new Hls();
+hls.loadSource(video.src);
+hls.attachMedia(video);
+
+new Timeline(video, document.querySelector("#timelinejs")!).init();

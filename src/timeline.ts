@@ -16,6 +16,7 @@ export default class Timeline implements IRequest {
   private canvas: Canvas;
   private actions: Actions;
   private pointer: Pointer;
+  private anchorEnd: Anchor;
   private anchorStart: Anchor;
 
   constructor(video: HTMLVideoElement | string, container: Element | string) {
@@ -31,10 +32,14 @@ export default class Timeline implements IRequest {
 
     this.container.style.cssText += `
       user-select: none;
+      padding: 5px 0;
     `;
-
-    this.anchorStart = new Anchor(this.container);
     this.pointer = new Pointer(this.container);
+    this.anchorEnd = new Anchor(this.container);
+    this.anchorStart = new Anchor(this.container);
+
+    this.anchorStart.time = 20
+    this.anchorEnd.time = 30;
 
     this.canvas = new Canvas(this.container);
     this.actions = new Actions(this.container);
@@ -43,6 +48,7 @@ export default class Timeline implements IRequest {
   public init() {
     this.canvas.init();
     this.pointer.init();
+    this.anchorEnd.init();
     this.anchorStart.init();
 
     this.update();
@@ -51,6 +57,7 @@ export default class Timeline implements IRequest {
   public update() {
     this.canvas.update();
     this.pointer.update();
+    this.anchorEnd.update();
     this.anchorStart.update();
 
     this.refAnimationFrame = requestAnimationFrame(() => this.update());
@@ -59,6 +66,7 @@ export default class Timeline implements IRequest {
   public destroy() {
     this.canvas.destroy();
     this.pointer.destroy();
+    this.anchorEnd.destroy();
     this.anchorStart.destroy();
     cancelAnimationFrame(this.refAnimationFrame);
   }

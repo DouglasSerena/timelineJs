@@ -13,6 +13,8 @@
     "typescript": "^4.4.3"
   },
   "dependencies": {
+    "@douglas-serena/decorators": "^1.0.3",
+    "@douglas-serena/utils": "^1.2.10",
     "dayjs": "^1.10.7",
     "hls.js": "^1.0.11"
   }

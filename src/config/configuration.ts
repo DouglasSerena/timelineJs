@@ -1,9 +1,20 @@
 export const configuration = {
   cursor: {
     color: "129, 199, 132",
-    slowUpdateTime: 10,
+    slowUpdateTime: 5,
   },
-  time: {
-    range: { max: 60, min: 1 },
+  shortcut: {
+    anchors: {
+      start: {
+        add: "a",
+        remove: "meta.a",
+      },
+      end: {
+        add: "z",
+        remove: "meta.z",
+      },
+      clear: "meta.c",
+    },
   },
+  zoom: { max: 60, min: 1 },
 };

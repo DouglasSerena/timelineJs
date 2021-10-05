@@ -6,13 +6,13 @@ import { MouseMoving } from "../events/mousemoving";
 export class Cursor {
   private mouseMoving: MouseMoving;
   protected cursor = document.createElement("div");
-  public time = 0;
+  public time = null;
 
   constructor(container: HTMLElement) {
     container.appendChild(this.cursor);
     this.cursor.style.cssText = `
       position: absolute;
-      inset: 0 auto auto auto;
+      inset: 5px auto auto auto;
 
       width: 3px;
       height: ${core.image.height}px;
@@ -32,6 +32,11 @@ export class Cursor {
 
   init() {}
   update() {
+    if (typeof this.time !== "number") {
+      this.cursor.hidden = true;
+      return;
+    }
+
     let { start, end } = core.time.range;
 
     if (this.time >= start && this.time <= end) {

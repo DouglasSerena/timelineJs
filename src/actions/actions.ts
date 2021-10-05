@@ -1,31 +1,17 @@
-import { configuration } from "../config/configuration";
-import { core } from "../core";
+import { Keyboard } from "./keyboard";
+import { MouseWheel } from "./mousewheel";
 
 export class Actions {
+  mousewheel: MouseWheel;
+  keyboard: Keyboard;
+
   constructor(private container: HTMLElement) {
-    container.addEventListener("mousewheel" as any, this.mousewheel);
+    this.mousewheel = new MouseWheel(container);
+    this.keyboard = new Keyboard(container);
   }
 
-  private mousewheel = (event: WheelEvent) => {
-    event.preventDefault();
-    event.ctrlKey ? this.zoomTimeline(event) : this.scrollTimeline(event);
-  };
-
-  private scrollTimeline = (event: WheelEvent) => {
-    let start =
-      core.time.range.start + (core.time.between * (event.deltaY / 50)) / 100;
-    core.time.range.start = Math.max(Math.min(start, 10000000), 0);
-  };
-
-  private zoomTimeline = (event: WheelEvent) => {
-    event.preventDefault();
-    let { max, min } = configuration.time.range;
-
-    let interval = core.time.interval + event.deltaY / 100;
-    core.time.interval = Math.max(Math.min(interval, max), min);
-  };
-
-  public destroy() {
-    this.container.removeEventListener("mousewheel" as any, this.mousewheel);
+  destroy() {
+    this.mousewheel.destroy();
+    this.keyboard.destroy();
   }
 }
