@@ -1,15 +1,16 @@
 import { configuration } from "./../config/configuration";
-import { core } from "./../core";
 
 import { MouseMoving } from "../events/mousemoving";
+import { ICore } from "../interfaces/core.interface";
+import { calcTimeRaw } from "../utils";
 
 export class Cursor {
-  private mouseMoving: MouseMoving;
   protected cursor = document.createElement("div");
+  private mouseMoving: MouseMoving;
   public time = null;
 
-  constructor(container: HTMLElement) {
-    container.appendChild(this.cursor);
+  constructor(protected core: ICore) {
+    core.container.appendChild(this.cursor);
     this.cursor.style.cssText = `
       position: absolute;
       inset: 5px auto auto auto;
@@ -20,6 +21,7 @@ export class Cursor {
       border-radius: 5px;
       background-color: rgb(${configuration.cursor.color});
 
+      z-index: 1;
       cursor: e-resize;
     `;
 
@@ -37,17 +39,18 @@ export class Cursor {
       return;
     }
 
-    let { start, end } = core.time.range;
+    let { start, end } = this.core.time.range;
 
     if (this.time >= start && this.time <= end) {
       if (this.cursor.hidden) {
         this.cursor.hidden = false;
       }
-      let percentOffsetX = ((this.time - start) * 100) / core.time.between;
-      let offsetX = (percentOffsetX * core.canvas.width) / 100;
+      let percentOffsetX = ((this.time - start) * 100) / this.core.time.between;
+      let offsetX = (percentOffsetX * this.core.canvas.width) / 100;
 
       if (offsetX <= 0) offsetX = 0;
-      if (offsetX >= core.canvas.width - 3) offsetX = core.canvas.width - 3;
+      if (offsetX >= this.core.canvas.width - 3)
+        offsetX = this.core.canvas.width - 3;
 
       this.cursor.style.left = `${offsetX}px`;
     } else {
@@ -60,24 +63,19 @@ export class Cursor {
   mousemoving = (event: MouseEvent) => {};
 
   slider(event: MouseEvent): any {
-    let { left, width } = core.canvas.getBoundingClientRect();
-    let offsetX = event.x - left;
-    if (offsetX < 0) {
-      offsetX = offsetX / configuration.cursor.slowUpdateTime;
-    }
-    if (offsetX > width) {
-      offsetX = width + (offsetX - width) / configuration.cursor.slowUpdateTime;
-    }
+    let timeRaw = calcTimeRaw(event, this.core);
+    let time = this.core.time.range.start + timeRaw;
 
-    let percentOffsetX = (offsetX * 100) / width;
-    let timeRaw = (core.time.between * percentOffsetX) / 100;
-    this.time = core.time.range.start + timeRaw;
+    if (time <= 0) time = 0;
+    if (time >= this.core.video.duration) time = this.core.video.duration;
 
-    if (this.time >= core.time.range.end) {
-      core.time.range.start += this.time - core.time.range.end;
+    this.time = time;
+
+    if (this.time <= this.core.time.range.start) {
+      this.core.time.range.start += this.time - this.core.time.range.start;
     }
-    if (this.time <= core.time.range.start) {
-      core.time.range.start += this.time - core.time.range.start;
+    if (this.time >= this.core.time.range.end) {
+      this.core.time.range.start += this.time - this.core.time.range.end;
     }
   }
 

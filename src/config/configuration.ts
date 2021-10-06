@@ -1,4 +1,7 @@
 export const configuration = {
+  block: {
+    color: "129, 199, 132",
+  },
   cursor: {
     color: "129, 199, 132",
     slowUpdateTime: 5,

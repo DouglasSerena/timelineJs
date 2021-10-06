@@ -1,30 +1,34 @@
 import { OnEvent, Shortcut, Utils } from "@douglas-serena/decorators";
 import { configuration } from "../config/configuration";
+import { ICore } from "../interfaces/core.interface";
 
 @Utils()
 export class Keyboard {
-  constructor(container: HTMLElement) {}
+  constructor(private core: ICore) {}
 
-  @Shortcut(configuration.shortcut.anchors.start.add, {})
-  addAnchorStart() {}
+  @Shortcut(configuration.shortcut.anchors.start.add)
+  addAnchorStart() {
+    this.core.anchors.start.time = this.core.video.currentTime;
+  }
 
   @Shortcut(configuration.shortcut.anchors.start.remove)
   removeAnchorStart() {
-    console.log(this);
+    this.core.anchors.start.time = null;
   }
 
   @Shortcut(configuration.shortcut.anchors.end.add)
   addAnchorEnd() {
-    console.log(this);
+    this.core.anchors.end.time = this.core.video.currentTime;
   }
   @Shortcut(configuration.shortcut.anchors.end.remove)
   removeAnchorEnd() {
-    console.log(this);
+    this.core.anchors.end.time = null;
   }
 
   @Shortcut(configuration.shortcut.anchors.clear)
   clearAnchors() {
-    console.log(this);
+    this.core.anchors.start.time = null;
+    this.core.anchors.end.time = null;
   }
 
   destroy() {}

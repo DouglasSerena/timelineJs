@@ -1,9 +1,10 @@
 import { configuration } from "../config/configuration";
+import { ICore } from "../interfaces/core.interface";
 import { Cursor } from "./cursor";
 
 export class Anchor extends Cursor {
-  constructor(container: HTMLElement) {
-    super(container);
+  constructor(protected core: ICore) {
+    super(core);
 
     let span = document.createElement("span");
     span.style.cssText = `

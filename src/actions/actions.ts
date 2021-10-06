@@ -1,3 +1,4 @@
+import { ICore } from "../interfaces/core.interface";
 import { Keyboard } from "./keyboard";
 import { MouseWheel } from "./mousewheel";
 
@@ -5,9 +6,11 @@ export class Actions {
   mousewheel: MouseWheel;
   keyboard: Keyboard;
 
-  constructor(private container: HTMLElement) {
-    this.mousewheel = new MouseWheel(container);
-    this.keyboard = new Keyboard(container);
+  constructor(private core: ICore) {}
+
+  init() {
+    this.mousewheel = new MouseWheel(this.core);
+    this.keyboard = new Keyboard(this.core);
   }
 
   destroy() {

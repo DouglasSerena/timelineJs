@@ -1,41 +1,40 @@
-import { IRequest } from "../interfaces/request.interface";
 import { Thumb } from "./thumb";
 import { Time } from "./time";
 
-import { core } from "../core";
+import { ICore } from "../interfaces/core.interface";
 
-export class Canvas implements IRequest {
+export class Canvas {
   private time: Time;
   private thumb: Thumb;
 
-  constructor(container: HTMLElement) {
-    container.appendChild(core.canvas);
+  constructor(private core: ICore) {
+    core.container.appendChild(core.canvas);
 
     core.canvas.height = core.image.height + 15;
-    core.canvas.width = container.offsetWidth;
+    core.canvas.width = core.container.offsetWidth;
     core.time.frames = core.canvas.width / core.image.width;
 
     new ResizeObserver((resize) => {
-      core.canvas.width = container.offsetWidth;
+      core.canvas.width = core.container.offsetWidth;
       core.time.frames = core.canvas.width / core.image.width;
-    }).observe(container);
+    }).observe(core.container);
 
     this.thumb = new Thumb();
-    this.time = new Time();
+    this.time = new Time(core);
   }
 
   init() {
-    core.context.fillStyle = "#000";
+    this.core.context.fillStyle = "#000";
 
     this.thumb.init();
     this.time.init();
   }
 
   update() {
-    let { width, height } = core.canvas;
+    let { width, height } = this.core.canvas;
 
-    core.context.clearRect(0, 60, width, height);
-    core.context.fillRect(0, 0, width, height - 15);
+    this.core.context.clearRect(0, 60, width, height);
+    this.core.context.fillRect(0, 0, width, height - 15);
 
     this.thumb.update();
     this.time.update();

@@ -1,18 +1,18 @@
-import { core } from "./../core";
+import { ICore } from "../interfaces/core.interface";
 import { Cursor } from "./cursor";
 
 export class Pointer extends Cursor {
-  constructor(container: HTMLElement) {
-    super(container);
+  constructor(protected core: ICore) {
+    super(core);
   }
 
   update() {
-    this.time = core.video.currentTime;
+    this.time = this.core.video.currentTime;
     super.update();
   }
 
   mousemoving = (event: MouseEvent) => {
     super.slider(event);
-    core.video.currentTime = this.time;
+    this.core.video.currentTime = this.time;
   };
 }
