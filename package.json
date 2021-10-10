@@ -1,6 +1,6 @@
 {
   "name": "@douglas-serena/timelinejs",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "dist/timelineJs.umd.js",
   "module": "dist/timelineJs.es5.js",
   "typings": "dist/types/timelineJs.d.ts",
@@ -8,16 +8,16 @@
   "browserslist": "> 0.25%, not dead",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DouglasSerena/timelineJs.git"
+    "url": "git+https://github.com/douglas-serena/timelineJs.git"
   },
   "keywords": [
     "timelineJs"
   ],
   "author": "DouglasSerena",
   "bugs": {
-    "url": "https://github.com/DouglasSerena/timelineJs/issues"
+    "url": "https://github.com/douglas-serena/timelineJs/issues"
   },
-  "homepage": "https://github.com/DouglasSerena/timelineJs#readme",
+  "homepage": "https://github.com/douglas-serena/timelineJs#readme",
   "scripts": {
     "dev": "parcel example/index.html",
     "build": "parcel build example/index.html",
@@ -28,6 +28,7 @@
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/parser": "^4.33.0",
     "eslint": "^8.0.0",
+    "lodash.camelcase": "^4.3.0",
     "parcel-bundler": "^1.12.5",
     "rollup": "^2.58.0",
     "rollup-plugin-commonjs": "^10.1.0",
@@ -38,8 +39,7 @@
     "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-typescript2": "^0.30.0",
     "sass": "^1.42.1",
-    "typescript": "^4.4.3",
-    "lodash.camelcase": "^4.3.0"
+    "typescript": "^4.4.3"
   },
   "dependencies": {
     "@douglas-serena/decorators": "^1.0.3",
