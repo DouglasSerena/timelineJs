@@ -1,4 +1,5 @@
 import { Anchor } from "../cursor/anchor";
+import { Publish } from "../publish";
 import { IRange } from "./range.interface";
 
 export interface ICore {
@@ -8,6 +9,10 @@ export interface ICore {
   context: CanvasRenderingContext2D;
   image: { width: number; height: number };
   offsetX: number;
+  publish: Publish;
+  cursor: {
+    fallow: boolean;
+  };
   anchors: {
     start: Anchor;
     end: Anchor;

@@ -1,6 +1,4 @@
-import { IRequest } from "../interfaces/request.interface";
-
-export class Thumb implements IRequest {
+export class Thumb {
   constructor() {}
 
   init() {}

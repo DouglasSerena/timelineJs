@@ -4,9 +4,13 @@ export const configuration = {
   },
   cursor: {
     color: "129, 199, 132",
-    slowUpdateTime: 5,
+    slowUpdateTime: 10,
   },
   shortcut: {
+    cursor: {
+      follow: 'meta.f',
+      move: 'meta.m'
+    },
     anchors: {
       start: {
         add: "a",

@@ -14,8 +14,6 @@ export class Block {
       height: ${core.image.height}px;
 
       background-color: rgb(${configuration.block.color}, 0.7);
-
-      cursor: move;
     `;
   }
 
@@ -39,8 +37,7 @@ export class Block {
       offsetX = (percentOffsetX * width) / 100;
     }
 
-    if (end >= this.core.time.range.end) {
-    } else {
+    if (end < this.core.time.range.end) {
       end = end - this.core.time.range.start;
       let percentOffsetX = (end * 100) / this.core.time.between;
       width = (percentOffsetX * width) / 100 - offsetX;

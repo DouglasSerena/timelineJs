@@ -1,7 +1,7 @@
 import { configuration } from "../config/configuration";
 import { MouseMoving } from "../events/mousemoving";
 import { ICore } from "../interfaces/core.interface";
-import { calcTimeRaw } from "../utils";
+import { getTimeRaw, scrollSides } from "../utils";
 import { Block } from "./block";
 
 export class BlockAnchor extends Block {
@@ -11,8 +11,11 @@ export class BlockAnchor extends Block {
   constructor(protected core: ICore) {
     super(core);
 
+    this.block.style.cssText += `cursor: grab;`;
+
     this.mouseMoving = new MouseMoving(this.block);
 
+    this.block.addEventListener("mouseup", this.mouseup);
     this.block.addEventListener("mousedown", this.mousedown);
     this.block.addEventListener("mousemoving" as any, (event) =>
       this.mousemoving(event)
@@ -27,14 +30,21 @@ export class BlockAnchor extends Block {
   }
 
   mousedown = (event: MouseEvent) => {
-    let timeRaw = calcTimeRaw(event, this.core);
+    let timeRaw = getTimeRaw(event, this.core);
+    this.block.style.cssText += `cursor: grabbing;`;
+    document.body.style.cssText += `cursor: grabbing;`;
 
     this.incrementTime =
       this.core.time.range.start + timeRaw - this.range.start;
   };
 
+  mouseup = () => {
+    this.block.style.cssText += `cursor: grab;`;
+    document.body.style.removeProperty("cursor");
+  };
+
   mousemoving(event: MouseEvent) {
-    let timeRaw = calcTimeRaw(event, this.core);
+    let timeRaw = getTimeRaw(event, this.core);
     let time = this.core.time.range.start + timeRaw - this.incrementTime;
     let between = this.range.end - this.range.start;
 
@@ -46,18 +56,15 @@ export class BlockAnchor extends Block {
     this.core.anchors.start.time = time;
     this.core.anchors.end.time = time + between;
 
-    if (this.core.anchors.start.time <= this.core.time.range.start) {
-      this.core.time.range.start +=
-        this.core.anchors.start.time - this.core.time.range.start;
-    }
-    if (this.core.anchors.end.time >= this.core.time.range.end) {
-      this.core.time.range.start +=
-        this.core.anchors.end.time - this.core.time.range.end;
-    }
+    scrollSides(
+      { start: this.core.anchors.start.time, end: this.core.anchors.end.time },
+      this.core
+    );
   }
 
   destroy() {
     this.mouseMoving.destroy();
+    this.block.removeEventListener("mouseup", this.mouseup);
     this.block.removeEventListener("mousedown", this.mousedown);
   }
 }

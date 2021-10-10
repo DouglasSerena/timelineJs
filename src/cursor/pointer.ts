@@ -8,6 +8,16 @@ export class Pointer extends Cursor {
 
   update() {
     this.time = this.core.video.currentTime;
+    if (this.core.cursor.fallow) {
+      if (this.core.video.currentTime >= this.core.time.range.end) {
+        this.core.time.range.start +=
+          this.core.video.currentTime - this.core.time.range.end;
+      }
+      if (this.core.video.currentTime <= this.core.time.range.start) {
+        this.core.time.range.start -=
+          this.core.time.range.start - this.core.video.currentTime;
+      }
+    }
     super.update();
   }
 

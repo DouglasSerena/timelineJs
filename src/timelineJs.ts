@@ -1,20 +1,22 @@
-import { Actions } from "./actions/actions";
 import { Canvas } from "./canvas/canvas";
-import { Pointer } from "./cursor/pointer";
-import { IRange } from "./interfaces/range.interface";
-import { IRequest } from "./interfaces/request.interface";
 import { Anchor } from "./cursor/anchor";
-import { Block } from "./block/block";
-import { ICore } from "./interfaces/core.interface";
+import { Pointer } from "./cursor/pointer";
+import { Actions } from "./actions/actions";
 import { BlockAnchor } from "./block/block-anchor";
+import { ICore } from "./interfaces/core.interface";
+import { IRange } from "./interfaces/range.interface";
+import { Publish } from "./publish";
 
-export default class Timeline implements IRequest {
+export default class TimelineJs {
   private core: ICore = {
     canvas: null,
     context: null,
     container: null,
     video: null,
     offsetX: 0,
+    cursor: {
+      fallow: true,
+    },
     image: { width: 80, height: 60 },
     anchors: {
       start: null,
@@ -47,6 +49,8 @@ export default class Timeline implements IRequest {
 
   private pointer: Pointer;
   private blockAnchor: BlockAnchor;
+
+  public events: Publish;
 
   constructor(video: HTMLVideoElement, container: Element) {
     this.core.canvas = document.createElement("canvas");
@@ -86,7 +90,9 @@ export default class Timeline implements IRequest {
     });
 
     this.core.container.style.cssText += `
+      position: relative;
       user-select: none;
+      overflow: hidden;
       padding: 5px 0;
     `;
 
@@ -95,6 +101,8 @@ export default class Timeline implements IRequest {
     this.canvas = new Canvas(this.core);
     this.actions = new Actions(this.core);
 
+    this.events = new Publish();
+    this.core.publish = this.events;
     this.core.anchors.start = new Anchor(this.core);
     this.core.anchors.end = new Anchor(this.core);
   }
@@ -119,6 +127,18 @@ export default class Timeline implements IRequest {
     this.core.anchors.end.update();
     this.core.anchors.start.update();
 
+    if (this.core.anchors.end.time) {
+      this.core.anchors.start.max = this.core.anchors.end.time;
+    } else {
+      this.core.anchors.start.max = null;
+    }
+
+    if (this.core.anchors.start.time) {
+      this.core.anchors.end.min = this.core.anchors.start.time;
+    } else {
+      this.core.anchors.end.min = null;
+    }
+
     this.refAnimationFrame = requestAnimationFrame(() => this.update());
   }
 
@@ -128,6 +148,7 @@ export default class Timeline implements IRequest {
 
     this.pointer.destroy();
     this.blockAnchor.destroy();
+    this.core.publish.destroy();
     this.core.anchors.end.destroy();
     this.core.anchors.start.destroy();
 

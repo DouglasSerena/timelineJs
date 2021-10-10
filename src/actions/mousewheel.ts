@@ -12,10 +12,15 @@ export class MouseWheel {
   };
 
   private scrollTimeline = (event: WheelEvent) => {
+    if (this.core.cursor.fallow) return;
+
     let start =
       this.core.time.range.start +
       (this.core.time.between * (event.deltaY / 50)) / 100;
-    this.core.time.range.start = Math.max(Math.min(start, 10000000), 0);
+    let end = this.core.video.duration - this.core.time.between;
+    let time = Math.min(start, end);
+
+    this.core.time.range.start = Math.max(time, 0);
   };
 
   private zoomTimeline = (event: WheelEvent) => {

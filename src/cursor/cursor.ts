@@ -2,12 +2,15 @@ import { configuration } from "./../config/configuration";
 
 import { MouseMoving } from "../events/mousemoving";
 import { ICore } from "../interfaces/core.interface";
-import { calcTimeRaw } from "../utils";
+import { getTimeRaw, scrollSides } from "../utils";
 
 export class Cursor {
   protected cursor = document.createElement("div");
   private mouseMoving: MouseMoving;
   public time = null;
+
+  public max: number | null = null;
+  public min: number | null = null;
 
   constructor(protected core: ICore) {
     core.container.appendChild(this.cursor);
@@ -63,20 +66,15 @@ export class Cursor {
   mousemoving = (event: MouseEvent) => {};
 
   slider(event: MouseEvent): any {
-    let timeRaw = calcTimeRaw(event, this.core);
+    let timeRaw = getTimeRaw(event, this.core);
     let time = this.core.time.range.start + timeRaw;
 
-    if (time <= 0) time = 0;
-    if (time >= this.core.video.duration) time = this.core.video.duration;
+    let max = this.max || this.core.video.duration;
+    let min = this.min || 0;
 
-    this.time = time;
+    this.time = Math.max(Math.min(time, max), min);
 
-    if (this.time <= this.core.time.range.start) {
-      this.core.time.range.start += this.time - this.core.time.range.start;
-    }
-    if (this.time >= this.core.time.range.end) {
-      this.core.time.range.start += this.time - this.core.time.range.end;
-    }
+    scrollSides({ start: this.time, end: this.time }, this.core);
   }
 
   destroy() {

@@ -6,6 +6,20 @@ import { ICore } from "../interfaces/core.interface";
 export class Keyboard {
   constructor(private core: ICore) {}
 
+  @Shortcut(configuration.shortcut.cursor.move)
+  moveToPointer() {
+    let start = this.core.video.currentTime - this.core.time.between / 2;
+    let end = this.core.video.duration - this.core.time.between;
+    let time = Math.min(start, end);
+
+    this.core.time.range.start = Math.max(time, 0);
+  }
+
+  @Shortcut(configuration.shortcut.cursor.follow)
+  followPointer() {
+    this.core.cursor.fallow = !this.core.cursor.fallow;
+  }
+
   @Shortcut(configuration.shortcut.anchors.start.add)
   addAnchorStart() {
     this.core.anchors.start.time = this.core.video.currentTime;
