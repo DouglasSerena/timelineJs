@@ -1,15 +1,23 @@
-export const configuration = {
-  block: {
-    color: "129, 199, 132",
+if (!window["__DOUGLAS_SERENA__"]) {
+  window["__DOUGLAS_SERENA__"] = {};
+}
+
+let configuration = window["__DOUGLAS_SERENA__"].configTimelineJs || {
+  color: {
+    blockAnchor: "129, 199, 132",
+    pointer: "129, 199, 132",
+    anchor: "129, 199, 132",
+    cursor: "129, 199, 132",
+    block: "@RANDOM",
+    time: "0, 0, 0",
   },
   cursor: {
-    color: "129, 199, 132",
     slowUpdateTime: 10,
   },
   shortcut: {
     cursor: {
-      follow: 'meta.f',
-      move: 'meta.m'
+      follow: "f1",
+      move: "f2",
     },
     anchors: {
       start: {
@@ -25,3 +33,9 @@ export const configuration = {
   },
   zoom: { max: 60, min: 1 },
 };
+
+if (!window["__DOUGLAS_SERENA__"].configTimelineJs) {
+  window["__DOUGLAS_SERENA__"].configTimelineJs = configuration;
+}
+
+export { configuration };

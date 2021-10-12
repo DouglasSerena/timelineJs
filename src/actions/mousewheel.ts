@@ -1,5 +1,6 @@
-import { configuration } from "../config/configuration";
+import { configuration } from "./../config/configuration";
 import { ICore } from "../interfaces/core.interface";
+import { calc } from "@douglas-serena/utils";
 
 export class MouseWheel {
   constructor(private core: ICore) {
@@ -28,7 +29,7 @@ export class MouseWheel {
     let { max, min } = configuration.zoom;
 
     let interval = this.core.time.interval + event.deltaY / 100;
-    this.core.time.interval = Math.max(Math.min(interval, max), min);
+    this.core.time.interval = calc(interval).keepBetween(max, min).value;
   };
 
   public destroy() {

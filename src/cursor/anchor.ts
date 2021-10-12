@@ -1,4 +1,4 @@
-import { configuration } from "../config/configuration";
+import { configuration } from "./../config/configuration";
 import { ICore } from "../interfaces/core.interface";
 import { Cursor } from "./cursor";
 
@@ -7,18 +7,19 @@ export class Anchor extends Cursor {
 
   constructor(protected core: ICore) {
     super(core);
+    this.cursor.style.cssText += `background-color: rgb(${configuration.color.anchor});`;
 
     let span = document.createElement("span");
     span.style.cssText = `
       position: absolute;
-      inset: -3px auto auto 50%;
+      inset: -2px auto auto 50%;
       transform: translateX(-50%);
 
       width: 6px;
       height: 6px;
 
       border-radius: 50%;
-      background-color: rgb(${configuration.cursor.color});
+      background-color: rgb(${configuration.color.anchor});
     `;
 
     let spanClone = span.cloneNode() as HTMLSpanElement;
@@ -40,6 +41,12 @@ export class Anchor extends Cursor {
   }
 
   update() {
+    if (this.color !== configuration.color.anchor) {
+      this.color = configuration.color.anchor;
+      for (let span of this.cursor.querySelectorAll("span") as any) {
+        span.style.cssText += `background-color: rgb(${this.color});`;
+      }
+    }
     super.update();
   }
 

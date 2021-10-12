@@ -1,5 +1,5 @@
-import { configuration } from "./config/configuration";
 import { ICore } from "./interfaces/core.interface";
+import { configuration } from "./config/configuration";
 
 export function getTimeRaw(event: MouseEvent, core: ICore) {
   let { left, width } = core.canvas.getBoundingClientRect();

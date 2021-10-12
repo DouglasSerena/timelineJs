@@ -1,4 +1,4 @@
-import { OnEvent, Shortcut, Utils } from "@douglas-serena/decorators";
+import { Shortcut, Utils } from "@douglas-serena/decorators";
 import { configuration } from "../config/configuration";
 import { ICore } from "../interfaces/core.interface";
 
@@ -22,7 +22,12 @@ export class Keyboard {
 
   @Shortcut(configuration.shortcut.anchors.start.add)
   addAnchorStart() {
-    this.core.anchors.start.time = this.core.video.currentTime;
+    if (
+      this.core.anchors.end.time === null ||
+      this.core.anchors.end.time > this.core.video.currentTime
+    ) {
+      this.core.anchors.start.time = this.core.video.currentTime;
+    }
   }
 
   @Shortcut(configuration.shortcut.anchors.start.remove)
@@ -32,7 +37,9 @@ export class Keyboard {
 
   @Shortcut(configuration.shortcut.anchors.end.add)
   addAnchorEnd() {
-    this.core.anchors.end.time = this.core.video.currentTime;
+    if (this.core.anchors.start.time < this.core.video.currentTime) {
+      this.core.anchors.end.time = this.core.video.currentTime;
+    }
   }
   @Shortcut(configuration.shortcut.anchors.end.remove)
   removeAnchorEnd() {

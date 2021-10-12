@@ -3,9 +3,13 @@ import { configuration } from "./../config/configuration";
 import { MouseMoving } from "../events/mousemoving";
 import { ICore } from "../interfaces/core.interface";
 import { getTimeRaw, scrollSides } from "../utils";
+import { calc } from "@douglas-serena/utils";
 
 export class Cursor {
   protected cursor = document.createElement("div");
+  protected color = configuration.color.cursor;
+  protected currentColor: string | null = null;
+
   private mouseMoving: MouseMoving;
   public time = null;
 
@@ -14,6 +18,12 @@ export class Cursor {
 
   constructor(protected core: ICore) {
     core.container.appendChild(this.cursor);
+
+    if (this.color === "@RANDOM") {
+      const rint = Math.floor(0x100000000 * Math.random());
+      this.color = `${rint & 255},${(rint >> 8) & 255},${(rint >> 16) & 255}`;
+    }
+
     this.cursor.style.cssText = `
       position: absolute;
       inset: 5px auto auto auto;
@@ -22,10 +32,10 @@ export class Cursor {
       height: ${core.image.height}px;
 
       border-radius: 5px;
-      background-color: rgb(${configuration.cursor.color});
+      background-color: rgb(${configuration.color.cursor});
 
       z-index: 1;
-      cursor: e-resize;
+      cursor: col-resize;
     `;
 
     this.mouseMoving = new MouseMoving(this.cursor);
@@ -37,6 +47,11 @@ export class Cursor {
 
   init() {}
   update() {
+    if (this.currentColor !== this.color) {
+      this.currentColor = this.color;
+      this.cursor.style.cssText += `background-color: rgb(${this.currentColor});`;
+    }
+
     if (typeof this.time !== "number") {
       this.cursor.hidden = true;
       return;
@@ -51,9 +66,7 @@ export class Cursor {
       let percentOffsetX = ((this.time - start) * 100) / this.core.time.between;
       let offsetX = (percentOffsetX * this.core.canvas.width) / 100;
 
-      if (offsetX <= 0) offsetX = 0;
-      if (offsetX >= this.core.canvas.width - 3)
-        offsetX = this.core.canvas.width - 3;
+      offsetX = calc(offsetX).keepBetween(this.core.canvas.width - 3).value;
 
       this.cursor.style.left = `${offsetX}px`;
     } else {
@@ -72,7 +85,7 @@ export class Cursor {
     let max = this.max || this.core.video.duration;
     let min = this.min || 0;
 
-    this.time = Math.max(Math.min(time, max), min);
+    this.time = calc(time).keepBetween(max, min).value;
 
     scrollSides({ start: this.time, end: this.time }, this.core);
   }

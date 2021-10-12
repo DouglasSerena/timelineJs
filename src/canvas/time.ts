@@ -1,6 +1,7 @@
 import duration from "dayjs/plugin/duration";
 import dayjs from "dayjs";
 import { ICore } from "../interfaces/core.interface";
+import { configuration } from "./../config/configuration";
 dayjs.extend(duration);
 
 export class Time {
@@ -13,8 +14,8 @@ export class Time {
     const time = this.core.time.range.start + rest;
     let offsetX = this.core.offsetX;
 
-    this.core.context.fillStyle = "#000";
-    this.core.context.strokeStyle = "#000";
+    this.core.context.fillStyle = `rgb(${configuration.color.time})`;
+    this.core.context.strokeStyle = `rgb(${configuration.color.time})`;
 
     const draw = (time: number, index = 0) => {
       // Desenha o tempo de cada frame

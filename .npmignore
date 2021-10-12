@@ -1,6 +1,9 @@
+.cache
+example
+node_modules
+src
+
 yarn-error.log
 yarn.lock
-.cache
-node_modules
-timeline
-src
+rollup.config.ts
+.eslintrc.json

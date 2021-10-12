@@ -6,6 +6,11 @@ import { BlockAnchor } from "./block/block-anchor";
 import { ICore } from "./interfaces/core.interface";
 import { IRange } from "./interfaces/range.interface";
 import { Publish } from "./publish";
+import { configuration } from "./config/configuration";
+import { $extends } from "@douglas-serena/utils";
+import { IConfiguration } from "./interfaces/configuration.interface";
+import { Block } from "./block/block";
+import { BlockClip } from "./block/block-clip";
 
 export default class TimelineJs {
   private core: ICore = {
@@ -48,6 +53,7 @@ export default class TimelineJs {
   private actions: Actions;
 
   private pointer: Pointer;
+  private blockClips: BlockClip[] = [];
   private blockAnchor: BlockAnchor;
 
   public events: Publish;
@@ -126,6 +132,7 @@ export default class TimelineJs {
     this.blockAnchor.update();
     this.core.anchors.end.update();
     this.core.anchors.start.update();
+    this.blockClips.forEach((block) => block.update());
 
     if (this.core.anchors.end.time) {
       this.core.anchors.start.max = this.core.anchors.end.time;
@@ -152,6 +159,30 @@ export default class TimelineJs {
     this.core.anchors.end.destroy();
     this.core.anchors.start.destroy();
 
+    this.blockClips.forEach((block, index, blocks) => {
+      block.destroy();
+      delete blocks[index];
+    });
+
     cancelAnimationFrame(this.refAnimationFrame);
+  }
+
+  public setClips(clips: IRange[]) {
+    for (let [index, blockClip] of Object.entries(this.blockClips)) {
+      blockClip.destroy();
+      delete this.blockClips[index];
+    }
+
+    for (let clip of clips) {
+      const blockClip = new BlockClip(this.core);
+      blockClip.range = clip;
+      blockClip.init();
+
+      this.blockClips.push(blockClip);
+    }
+  }
+
+  public static configuration(config: IConfiguration) {
+    $extends(configuration, config);
   }
 }
