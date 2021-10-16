@@ -1,6 +1,6 @@
 {
   "name": "@douglas-serena/timelinejs",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "main": "dist/timelineJs.umd.js",
   "module": "dist/timelineJs.es5.js",
   "typings": "dist/types/timelineJs.d.ts",
