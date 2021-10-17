@@ -7,6 +7,7 @@ export class Pointer extends Cursor {
 
   constructor(protected core: ICore) {
     super(core);
+    this.cursor.style.cssText += `z-index: 2;`;
   }
 
   update() {

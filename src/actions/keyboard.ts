@@ -1,4 +1,5 @@
 import { Shortcut, Utils } from "@douglas-serena/decorators";
+
 import { configuration } from "../config/configuration";
 import { ICore } from "../interfaces/core.interface";
 

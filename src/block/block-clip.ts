@@ -12,10 +12,6 @@ export class BlockClip extends Block {
   }
 
   update() {
-    if (this.color !== configuration.color.blockClip) {
-      this.color = configuration.color.blockClip;
-    }
-
     super.update();
   }
   click = () => {

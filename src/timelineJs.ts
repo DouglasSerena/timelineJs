@@ -9,8 +9,8 @@ import { Publish } from "./publish";
 import { configuration } from "./config/configuration";
 import { $extends } from "@douglas-serena/utils";
 import { IConfiguration } from "./interfaces/configuration.interface";
-import { Block } from "./block/block";
 import { BlockClip } from "./block/block-clip";
+import { IClip } from "./interfaces/clip.interface";
 
 export default class TimelineJs {
   private core: ICore = {
@@ -31,22 +31,22 @@ export default class TimelineJs {
       mod: 0,
       frames: 0,
       between: 0,
-      interval: 1,
+      interval: 3600,
       range: { start: 0, end: 0 },
+      cut: { start: null, end: null },
     },
   } as ICore;
 
   private refAnimationFrame: number;
 
   public get cut(): IRange {
-    return {
-      start: this.core.anchors.start.time,
-      end: this.core.anchors.end.time,
-    };
+    return this.core.time.cut;
   }
   public set cut(cut: Partial<IRange>) {
-    this.core.anchors.end.time = cut.end || this.core.anchors.end.time;
-    this.core.anchors.start.time = cut.start || this.core.anchors.start.time;
+    this.core.anchors.end.time =
+      cut.end === undefined ? this.core.anchors.end.time : cut.end;
+    this.core.anchors.start.time =
+      cut.start === undefined ? this.core.anchors.start.time : cut.start;
   }
 
   private canvas: Canvas;
@@ -90,6 +90,15 @@ export default class TimelineJs {
 
           target.end = target.start + this.core.time.between;
         }
+
+        return true;
+      },
+    });
+
+    this.core.time.cut = new Proxy(this.core.time.cut, {
+      set: (target, prop, value) => {
+        target[prop] = value;
+        this.core.anchors[prop].time = value;
 
         return true;
       },
@@ -167,7 +176,12 @@ export default class TimelineJs {
     cancelAnimationFrame(this.refAnimationFrame);
   }
 
-  public setClips(clips: IRange[]) {
+  public clearAnchors() {
+    this.core.anchors.start.time = null;
+    this.core.anchors.end.time = null;
+  }
+
+  public setClips(clips: IClip[]) {
     for (let [index, blockClip] of Object.entries(this.blockClips)) {
       blockClip.destroy();
       delete this.blockClips[index];
@@ -175,11 +189,19 @@ export default class TimelineJs {
 
     for (let clip of clips) {
       const blockClip = new BlockClip(this.core);
+      if (clip.color !== undefined) {
+        blockClip.color = clip.color;
+        console.log(clip.color, blockClip.color);
+      }
       blockClip.range = clip;
       blockClip.init();
 
       this.blockClips.push(blockClip);
     }
+  }
+
+  public setInterval(interval: number) {
+    this.core.time.interval = interval;
   }
 
   public static configuration(config: IConfiguration) {

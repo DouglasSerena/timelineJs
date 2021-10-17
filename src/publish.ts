@@ -19,7 +19,7 @@ export class Publish {
 
   destroy() {
     for (const event in this._events) {
-      this._events.get(event).unsubscribe();
+      this._events.get(event).complete();
       this._events.delete(event);
     }
   }

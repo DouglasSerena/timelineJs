@@ -1,8 +1,6 @@
 import { Thumb } from "./thumb";
 import { Time } from "./time";
-
 import { ICore } from "../interfaces/core.interface";
-import { configuration } from "./../config/configuration";
 
 export class Canvas {
   private time: Time;

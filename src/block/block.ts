@@ -3,9 +3,9 @@ import { ICore } from "../interfaces/core.interface";
 
 export class Block {
   protected block = document.createElement("div");
-  protected color = configuration.color.block;
   protected currentColor: string | null = null;
   public range = { start: null, end: null };
+  public color = configuration.color.block;
 
   constructor(protected core: ICore) {
     core.container.appendChild(this.block);

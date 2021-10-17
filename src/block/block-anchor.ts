@@ -11,7 +11,7 @@ export class BlockAnchor extends Block {
   constructor(protected core: ICore) {
     super(core);
 
-    this.block.style.cssText += `cursor: grab;background-color: rgb(${configuration.color.blockAnchor}, 0.7);`;
+    this.block.style.cssText += `cursor: grab;background-color: rgb(${configuration.color.blockAnchor}, 0.7);z-index: 1;`;
 
     this.mouseMoving = new MouseMoving(this.block);
 

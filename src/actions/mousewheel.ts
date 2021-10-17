@@ -19,17 +19,19 @@ export class MouseWheel {
       this.core.time.range.start +
       (this.core.time.between * (event.deltaY / 50)) / 100;
     let end = this.core.video.duration - this.core.time.between;
-    let time = Math.min(start, end);
 
-    this.core.time.range.start = Math.max(time, 0);
+    this.core.time.range.start = calc(start).keepBetween(end, 0).value;
   };
 
   private zoomTimeline = (event: WheelEvent) => {
     event.preventDefault();
-    let { max, min } = configuration.zoom;
+    let { max, min, speed, rate } = configuration.zoom;
 
-    let interval = this.core.time.interval + event.deltaY / 100;
+    speed *= this.core.time.interval / rate;
+
+    let interval = this.core.time.interval + event.deltaY * speed;
     this.core.time.interval = calc(interval).keepBetween(max, min).value;
+    this.core.time.range.start = this.core.time.range.start;
   };
 
   public destroy() {

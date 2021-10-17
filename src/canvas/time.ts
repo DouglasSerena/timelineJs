@@ -26,10 +26,7 @@ export class Time {
       this.core.context.stroke();
       this.core.context.font = `10px Roboto, "Helvetica Neue", sans-serif`;
 
-      let text = dayjs
-        .duration(Math.floor(time * 1000))
-        .format("H:m:ss")
-        .replace("0:", "");
+      let text = dayjs.duration(Math.floor(time * 1000)).format("HH:mm:ss");
 
       let widthText = this.core.context.measureText(text).width;
 

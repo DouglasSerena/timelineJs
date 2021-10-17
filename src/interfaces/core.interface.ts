@@ -23,5 +23,6 @@ export interface ICore {
     between: number;
     frames: number;
     interval: number;
+    cut: IRange;
   };
 }

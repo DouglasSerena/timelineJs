@@ -16,22 +16,22 @@ let configuration = window["__DOUGLAS_SERENA__"].configTimelineJs || {
   },
   shortcut: {
     cursor: {
-      follow: "f1",
-      move: "f2",
+      follow: "g",
+      move: "h",
     },
     anchors: {
       start: {
-        add: "a",
+        add: "meta.arrowLeft",
         remove: "meta.a",
       },
       end: {
-        add: "z",
+        add: "meta.arrowRight",
         remove: "meta.z",
       },
       clear: "meta.c",
     },
   },
-  zoom: { max: 60, min: 1 },
+  zoom: { max: 3600, min: 1, speed: 0.01, rate: 10 },
 };
 
 if (!window["__DOUGLAS_SERENA__"].configTimelineJs) {
