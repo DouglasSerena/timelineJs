@@ -1,6 +1,6 @@
 {
   "name": "@douglas-serena/timelinejs",
-  "version": "1.0.13",
+  "version": "1.0.15",
   "main": "dist/timelineJs.umd.js",
   "module": "dist/timelineJs.es5.js",
   "typings": "dist/types/timelineJs.d.ts",
@@ -42,8 +42,8 @@
     "typescript": "^4.4.3"
   },
   "dependencies": {
-    "@douglas-serena/decorators": "^1.0.5",
-    "@douglas-serena/utils": "^1.4.7",
+    "@douglas-serena/decorators": "^1.0.8",
+    "@douglas-serena/utils": "^1.4.8",
     "dayjs": "^1.10.7",
     "hls.js": "^1.0.11",
     "rxjs": "^7.4.0"
