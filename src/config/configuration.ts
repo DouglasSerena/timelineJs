@@ -22,11 +22,11 @@ let configuration = window["__DOUGLAS_SERENA__"].configTimelineJs || {
     anchors: {
       start: {
         add: "meta.arrowLeft",
-        remove: "meta.a",
+        remove: "shift.arrowLeft",
       },
       end: {
         add: "meta.arrowRight",
-        remove: "meta.z",
+        remove: "shift.arrowRight",
       },
       clear: "meta.c",
     },

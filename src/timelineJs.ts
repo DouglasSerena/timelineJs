@@ -40,7 +40,13 @@ export default class TimelineJs {
   private refAnimationFrame: number;
 
   public get cut(): IRange {
-    return this.core.time.cut;
+    return new Proxy(this.core.time.cut, {
+      set: (target, prop, value) => {
+        target[prop] = value;
+        this.core.anchors[prop].time = value;
+        return true;
+      },
+    });
   }
   public set cut(cut: Partial<IRange>) {
     this.core.anchors.end.time =
@@ -90,15 +96,6 @@ export default class TimelineJs {
 
           target.end = target.start + this.core.time.between;
         }
-
-        return true;
-      },
-    });
-
-    this.core.time.cut = new Proxy(this.core.time.cut, {
-      set: (target, prop, value) => {
-        target[prop] = value;
-        this.core.anchors[prop].time = value;
 
         return true;
       },

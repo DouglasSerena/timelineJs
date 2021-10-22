@@ -11,20 +11,3 @@ hls.attachMedia(video);
 
 let timeline = new timelineJs(video, document.querySelector("#timelinejs")!);
 timeline.init();
-timeline.setInterval(600);
-timeline.setClips([
-  { start: 10, end: 15, color: "12,52,63" },
-  { start: 17, end: 21, color: "12,52,63" },
-]);
-timeline.setClips([
-  { start: 9, end: 10, color: "12,52,63" },
-  { start: 11, end: 21, color: "12,52,63" },
-]);
-
-let cut = timeline.cut;
-
-let count = 10;
-setInterval(() => {
-  count++;
-  cut.end = count;
-}, 2000);

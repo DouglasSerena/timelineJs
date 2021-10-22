@@ -36,6 +36,8 @@ export class Anchor extends Cursor {
         this._time = value;
         const { start, end } = this.core.anchors;
         this.core.publish.emit("anchor", { start: start.time, end: end.time });
+        this.core.time.cut.start = start.time;
+        this.core.time.cut.end = end.time;
       },
     });
   }
