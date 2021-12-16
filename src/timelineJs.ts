@@ -39,7 +39,7 @@ export default class TimelineJs {
 
   private refAnimationFrame: number;
 
-  public get cut(): IRange {
+  public get cut(): Partial<IRange> {
     return new Proxy(this.core.time.cut, {
       set: (target, prop, value) => {
         target[prop] = value;
@@ -178,7 +178,15 @@ export default class TimelineJs {
     this.core.anchors.end.time = null;
   }
 
+  public clearClips() {
+    this.blockClips.forEach((blockClip) => {
+      blockClip.destroy()
+    })
+    this.blockClips = []
+  }
+
   public setClips(clips: IClip[]) {
+    this.clearClips()
     for (let [index, blockClip] of Object.entries(this.blockClips)) {
       blockClip.destroy();
       delete this.blockClips[index];

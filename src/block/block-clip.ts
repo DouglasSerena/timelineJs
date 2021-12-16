@@ -14,12 +14,14 @@ export class BlockClip extends Block {
   update() {
     super.update();
   }
+
   click = () => {
     this.core.anchors.start.time = this.range.start;
     this.core.anchors.end.time = this.range.end;
   };
 
   destroy() {
+    this.block.remove()
     this.block.removeEventListener("click", this.click);
   }
 }
