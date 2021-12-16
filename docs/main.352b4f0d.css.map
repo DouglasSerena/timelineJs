@@ -1,0 +1,1 @@
+{"version":3,"sources":["native\\main.scss"],"names":[],"mappings":"AAAA;EACE;;;AAGF;EACE;;;AAEF;EACE;EACA","file":"main.352b4f0d.css","sourceRoot":"..\\src\\__example__","sourcesContent":["video {\r\n  width: 100%;\r\n}\r\n\r\n.timelinejs-container {\r\n  padding: 0 20px;\r\n}\r\n#timelinejs {\r\n  position: relative;\r\n  overflow: hidden;\r\n}\r\n\r\ncanvas {\r\n}\r\n"]}

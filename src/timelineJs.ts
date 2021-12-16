@@ -1,3 +1,4 @@
+import { IConfiguration } from "./interfaces/configuration.interface";
 import { Canvas } from "./canvas/canvas";
 import { Anchor } from "./cursor/anchor";
 import { Pointer } from "./cursor/pointer";
@@ -5,12 +6,11 @@ import { Actions } from "./actions/actions";
 import { BlockAnchor } from "./block/block-anchor";
 import { ICore } from "./interfaces/core.interface";
 import { IRange } from "./interfaces/range.interface";
-import { Publish } from "./publish";
 import { configuration } from "./config/configuration";
-import { $extends } from "@douglas-serena/utils";
-import { IConfiguration } from "./interfaces/configuration.interface";
-import { BlockClip } from "./block/block-clip";
 import { IClip } from "./interfaces/clip.interface";
+import { BlockClip } from "./block/block-clip";
+import { Publish } from "./publish";
+import _, { extend } from "lodash";
 
 export default class TimelineJs {
   private core: ICore = {
@@ -202,6 +202,6 @@ export default class TimelineJs {
   }
 
   public static configuration(config: IConfiguration) {
-    $extends(configuration, config);
+    extend(configuration, config);
   }
 }

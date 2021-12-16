@@ -19,12 +19,13 @@
   },
   "homepage": "https://github.com/douglas-serena/timelineJs#readme",
   "scripts": {
-    "dev": "parcel example/index.html",
-    "build": "parcel build example/index.html",
+    "dev": "parcel src/__example__/**/*.html -d docs",
+    "build": "parcel build src/__example__/**/*.html -d docs",
     "prepublish": "yarn build:ts",
     "build:ts": "tsc --module commonjs && rollup -c rollup.config.ts"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.176",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/parser": "^4.33.0",
     "eslint": "^8.0.0",
@@ -46,6 +47,7 @@
     "@douglas-serena/utils": "^1.4.11",
     "dayjs": "^1.10.7",
     "hls.js": "^1.0.11",
+    "lodash": "^4.17.21",
     "rxjs": "^7.4.0"
   }
 }
